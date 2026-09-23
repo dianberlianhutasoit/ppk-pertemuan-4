@@ -20,7 +20,24 @@ Fitur yang saat ini sudah tersedia di repository:
 - Current balance
 - Ringkasan pemasukan dan pengeluaran
 
-> Beberapa komponen dashboard masih dapat dikembangkan lebih lanjut agar seluruh fitur tampil dalam satu halaman utama yang terintegrasi.
+## Software Requirements Specification (SRS)
+
+### Marchella
+- **SRS-01**: Pengguna dapat membuat akun.
+- **SRS-02**: Pengguna dapat login ke aplikasi.
+- **SRS-03**: Session login tetap aktif selama masih berlaku.
+- **SRS-04**: Preferensi pengguna disimpan menggunakan cookies.
+
+### Argifari
+- **SRS-05**: Pengguna dapat menambahkan transaksi.
+- **SRS-06**: Pengguna dapat mengubah transaksi.
+- **SRS-07**: Pengguna dapat menghapus transaksi.
+- **SRS-08**: Transaksi hanya dapat diakses oleh pemiliknya.
+
+### Kayla
+- **SRS-09**: Pengguna dapat melihat riwayat transaksi.
+- **SRS-10**: Pengguna dapat melihat saldo saat ini.
+- **SRS-11**: Pengguna dapat melihat total pemasukan dan pengeluaran.
 
 ## Tech Stack
 
@@ -147,4 +164,4 @@ Sebelum proses merge, struktur dan penggunaan Supabase disamakan agar integrasi 
 
 ## Status
 
-Project sudah memiliki fitur utama autentikasi dan pengelolaan transaksi. Integrasi serta penyempurnaan tampilan dashboard masih dapat dikembangkan lebih lanjut.
+Project sudah memiliki fitur utama autentikasi dan pengelolaan transaksi.
