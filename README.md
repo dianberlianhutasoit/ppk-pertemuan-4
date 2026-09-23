@@ -1,8 +1,8 @@
 # DUITku
 
-DUITku adalah aplikasi expense tracker sederhana untuk membantu mahasiswa mencatat dan memantau pemasukan serta pengeluaran.
+DUITku adalah aplikasi web Expense Tracker yang memungkinkan mahasiswa mengelola keuangan pribadinya secara sederhana. Pengguna dapat membuat akun dan masuk ke dalam aplikasi untuk mencatat pemasukan dan pengeluaran, melihat riwayat transaksi, serta mengetahui kondisi keuangannya melalui informasi saldo, total pemasukan, dan total pengeluaran.
 
-Project ini dibuat untuk praktikum PPK Pertemuan 4 dengan pendekatan pengembangan berbasis branch menggunakan Git dan GitHub.
+Setiap transaksi terhubung dengan pengguna yang sedang login sehingga masing-masing pengguna hanya dapat mengakses dan mengelola data miliknya sendiri. Aplikasi juga mempertahankan informasi login selama session masih berlaku dan menggunakan cookies untuk menyimpan preferensi pengguna. Melalui dashboard, pengguna dapat menambahkan, mengubah, menghapus, dan melihat transaksi keuangannya.
 
 ## Fitur
 
