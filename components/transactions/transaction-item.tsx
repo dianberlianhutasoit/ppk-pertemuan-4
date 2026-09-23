@@ -2,10 +2,15 @@
 
 import { useState } from 'react';
 import { Transaction } from '@/types/transaction';
-import { deleteTransaction } from '@/app/transactions/actions';
+import { deleteTransaction } from '@/lib/transactions';
 import TransactionForm from './transaction-form';
 
-export default function TransactionItem({ item }: { item: Transaction }) {
+interface ItemProps {
+  item: Transaction;
+  onSuccess?: () => void;
+}
+
+export default function TransactionItem({ item, onSuccess }: ItemProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [deleting, setDeleting] = useState(false);
 
@@ -14,7 +19,8 @@ export default function TransactionItem({ item }: { item: Transaction }) {
     setDeleting(true);
     try {
       await deleteTransaction(item.id);
-    } catch (err) {
+      if (onSuccess) onSuccess();
+    } catch (err: unknown) {
       alert(err instanceof Error ? err.message : 'Gagal menghapus');
       setDeleting(false);
     }
@@ -23,7 +29,13 @@ export default function TransactionItem({ item }: { item: Transaction }) {
   if (isEditing) {
     return (
       <div style={{ border: '1px solid #ccc', padding: '12px', marginBottom: '12px', borderRadius: '6px' }}>
-        <TransactionForm initialData={item} onSuccess={() => setIsEditing(false)} />
+        <TransactionForm
+          initialData={item}
+          onSuccess={() => {
+            setIsEditing(false);
+            if (onSuccess) onSuccess();
+          }}
+        />
         <button onClick={() => setIsEditing(false)} style={{ marginTop: '8px', padding: '6px 12px' }}>
           Batal
         </button>

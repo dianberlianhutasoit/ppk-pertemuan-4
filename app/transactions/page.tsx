@@ -1,23 +1,41 @@
-import { getTransactions } from './actions';
+'use client';
+
+import { useEffect, useState, useCallback } from 'react';
+import { Transaction } from '@/types/transaction';
+import { getTransactions } from '@/lib/transactions';
 import TransactionForm from '@/components/transactions/transaction-form';
 import TransactionItem from '@/components/transactions/transaction-item';
 
-export default async function TransactionsPage() {
-  let transactions = [];
-  let errorMsg = null;
+export default function TransactionsPage() {
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
-  try {
-    transactions = await getTransactions();
-  } catch (err: unknown) {
-    errorMsg = err instanceof Error ? err.message : 'Terjadi kesalahan.';
-  }
+  const fetchTransactions = useCallback(async () => {
+    try {
+      setLoading(true);
+      setErrorMsg(null);
+      const data = await getTransactions();
+      setTransactions(data || []);
+    } catch (err: unknown) {
+      setErrorMsg(err instanceof Error ? err.message : 'Gagal memuat transaksi.');
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    const timeoutId = setTimeout(fetchTransactions, 0);
+
+    return () => clearTimeout(timeoutId);
+  }, [fetchTransactions]);
 
   return (
     <div style={{ padding: '24px', maxWidth: '600px', margin: '0 auto' }}>
       <h1>Kelola Transaksi (DUITku)</h1>
 
       <div style={{ marginBottom: '32px' }}>
-        <TransactionForm />
+        <TransactionForm onSuccess={fetchTransactions} />
       </div>
 
       <hr style={{ margin: '24px 0' }} />
@@ -25,11 +43,13 @@ export default async function TransactionsPage() {
       <h2>Riwayat Transaksi</h2>
       {errorMsg && <p style={{ color: 'red' }}>{errorMsg}</p>}
       
-      {transactions.length === 0 ? (
+      {loading ? (
+        <p>Memuat data transaksi...</p>
+      ) : transactions.length === 0 ? (
         <p>Belum ada transaksi.</p>
       ) : (
         transactions.map((tx) => (
-          <TransactionItem key={tx.id} item={tx} />
+          <TransactionItem key={tx.id} item={tx} onSuccess={fetchTransactions} />
         ))
       )}
     </div>

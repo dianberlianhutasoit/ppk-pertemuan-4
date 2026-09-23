@@ -1,25 +1,22 @@
-'use server';
-
-import { createClient } from '@/lib/supabase/server';
+import { supabase } from '@/utils/supabase/client';
 import { TransactionInput } from '@/types/transaction';
-import { revalidatePath } from 'next/cache';
 
+/**
+ * Helper internal untuk memastikan user sudah login
+ */
 async function getAuthenticatedUser() {
-  const supabase = await createClient();
-  const {
-    data: { user },
-    error,
-  } = await supabase.auth.getUser();
+  const { data: { user }, error } = await supabase.auth.getUser();
 
   if (error || !user) {
     throw new Error('Akses ditolak: Anda harus login terlebih dahulu.');
   }
 
-  return { supabase, user };
+  return user;
 }
 
+// 1. READ: Mengambil riwayat transaksi user
 export async function getTransactions() {
-  const { supabase } = await getAuthenticatedUser();
+  await getAuthenticatedUser();
 
   const { data, error } = await supabase
     .from('transactions')
@@ -35,16 +32,17 @@ export async function getTransactions() {
   return data;
 }
 
+// 2. CREATE: Menambahkan transaksi baru
 export async function createTransaction(input: TransactionInput) {
-  const { supabase, user } = await getAuthenticatedUser();
+  const user = await getAuthenticatedUser();
 
   if (!input.amount || input.amount <= 0) {
     throw new Error('Jumlah transaksi harus lebih dari 0.');
   }
 
-  const { error } = await supabase.from('transactions').insert([
+  const { data, error } = await supabase.from('transactions').insert([
     {
-      user_id: user.id,
+      user_id: user.id, // ID diambil langsung dari Supabase Auth
       type: input.type,
       amount: input.amount,
       description: input.description.trim(),
@@ -57,17 +55,18 @@ export async function createTransaction(input: TransactionInput) {
     throw new Error('Gagal menambah transaksi.');
   }
 
-  revalidatePath('/transactions');
+  return data;
 }
 
+// 3. UPDATE: Mengubah transaksi berdasarkan ID
 export async function updateTransaction(id: string, input: TransactionInput) {
-  const { supabase } = await getAuthenticatedUser();
+  await getAuthenticatedUser();
 
   if (!input.amount || input.amount <= 0) {
     throw new Error('Jumlah transaksi harus lebih dari 0.');
   }
 
-  const { error } = await supabase
+  const { data, error } = await supabase
     .from('transactions')
     .update({
       type: input.type,
@@ -82,13 +81,14 @@ export async function updateTransaction(id: string, input: TransactionInput) {
     throw new Error('Gagal memperbarui transaksi.');
   }
 
-  revalidatePath('/transactions');
+  return data;
 }
 
+// 4. DELETE: Menghapus transaksi berdasarkan ID
 export async function deleteTransaction(id: string) {
-  const { supabase } = await getAuthenticatedUser();
+  await getAuthenticatedUser();
 
-  const { error } = await supabase
+  const { data, error } = await supabase
     .from('transactions')
     .delete()
     .eq('id', id);
@@ -98,5 +98,5 @@ export async function deleteTransaction(id: string) {
     throw new Error('Gagal menghapus transaksi.');
   }
 
-  revalidatePath('/transactions');
+  return data;
 }

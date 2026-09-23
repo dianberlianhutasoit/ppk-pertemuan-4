@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { Transaction, TransactionInput } from '@/types/transaction';
-import { createTransaction, updateTransaction } from '../../app/transactions/actions';
+import { createTransaction, updateTransaction } from '@/lib/transactions';
 
 interface FormProps {
   initialData?: Transaction | null;
