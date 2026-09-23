@@ -1,36 +1,150 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# DUITku
 
-## Getting Started
+DUITku adalah aplikasi expense tracker sederhana untuk membantu mahasiswa mencatat dan memantau pemasukan serta pengeluaran.
 
-First, run the development server:
+Project ini dibuat untuk praktikum PPK Pertemuan 4 dengan pendekatan pengembangan berbasis branch menggunakan Git dan GitHub.
+
+## Fitur
+
+Fitur yang saat ini sudah tersedia di repository:
+
+- Register
+- Login
+- Logout
+- Session pengguna
+- Dark mode & light mode menggunakan cookies
+- Tambah transaksi
+- Edit transaksi
+- Hapus transaksi
+- Riwayat transaksi
+- Current balance
+- Ringkasan pemasukan dan pengeluaran
+
+> Beberapa komponen dashboard masih dapat dikembangkan lebih lanjut agar seluruh fitur tampil dalam satu halaman utama yang terintegrasi.
+
+## Tech Stack
+
+- Next.js
+- TypeScript
+- React
+- Tailwind CSS
+- Supabase
+- Git & GitHub
+
+## Struktur Supabase
+
+Seluruh fitur menggunakan satu Supabase client yang berada di:
+
+```text
+utils/supabase/client.ts
+```
+
+Konfigurasi menggunakan environment variable:
+
+```env
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=your_supabase_publishable_key
+```
+
+File `.env.local` tidak boleh di-commit ke repository.
+
+## Menjalankan Project
+
+### 1. Clone repository
+
+```bash
+git clone https://github.com/dianberlianhutasoit/ppk-pertemuan-4.git
+```
+
+### 2. Masuk ke folder project
+
+```bash
+cd ppk-pertemuan-4
+```
+
+### 3. Install dependencies
+
+```bash
+npm install
+```
+
+### 4. Buat file `.env.local`
+
+Isi dengan konfigurasi Supabase:
+
+```env
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=your_supabase_publishable_key
+```
+
+### 5. Jalankan development server
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Buka aplikasi melalui:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```text
+http://localhost:3000
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Route Utama
 
-## Learn More
+```text
+/                Home
+/auth/register   Register
+/auth/login      Login
+/transactions    Kelola transaksi
+```
 
-To learn more about Next.js, take a look at the following resources:
+## Struktur Project
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```text
+app/
+├── auth/
+│   ├── login/
+│   └── register/
+├── transactions/
+└── page.tsx
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+components/
+├── transactions/
+├── CurrentBalance.tsx
+├── IncomeExpenseSummary.tsx
+├── TransactionHistory.tsx
+├── logout-button.tsx
+└── theme-toggle.tsx
 
-## Deploy on Vercel
+lib/
+└── transactions.ts
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+types/
+└── transaction.ts
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+utils/
+└── supabase/
+    └── client.ts
+```
+
+## Workflow Pengembangan
+
+Setiap fitur dikembangkan pada branch terpisah, kemudian direview sebelum digabungkan ke `main`.
+
+Contoh branch yang digunakan:
+
+```text
+feature/register
+feature/login
+feature/logout
+feature/add-transactions
+feature/current-balance
+feature/income-expense-summary
+feature/transaction-history
+```
+
+Sebelum proses merge, struktur dan penggunaan Supabase disamakan agar integrasi antarbranch tetap konsisten.
+
+## Status
+
+Project sudah memiliki fitur utama autentikasi dan pengelolaan transaksi. Integrasi serta penyempurnaan tampilan dashboard masih dapat dikembangkan lebih lanjut.
