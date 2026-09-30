@@ -45,7 +45,7 @@ export async function fetchBudgetMonitoringData(monthYear: string): Promise<{ su
     }
 
     const totalSpent = transactionsData 
-      ? transactionsData.reduce((acc, curr) => acc + Number(curr.amount), 0) 
+      ? transactionsData.reduce((acc: number, curr: { amount: number }) => acc + Number(curr.amount), 0) 
       : 0;
 
     const remainingBudget = totalBudget - totalSpent;
